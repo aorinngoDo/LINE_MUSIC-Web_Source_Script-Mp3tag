@@ -1,0 +1,144 @@
+﻿# ###################################################################
+# LINE MUSIC Web Sources Script for Mp3Tag
+# Search by ALBUM
+# ###################################################################
+
+[Name]=LINE MUSIC
+[BasedOn]=https://music.line.me/
+[IndexUrl]=https://music.line.me/api2/search/albums.v1?start=1&display=1000&sort=RELEVANCE&query=%s
+[AlbumUrl]=https://music.line.me/api2/album/
+[WordSeperator]=+
+[IndexFormat]=%_url%|%_preview%|%Album%|%Year%|%Tracks%|%Artist%
+[SearchBy]=%artist% %album%
+[Encoding]=url-utf-8
+
+
+# ###################################################################
+# Index
+# ###################################################################
+
+[ParserScriptIndex]=...
+
+
+json "on"
+json_select_object "response"
+json_select_object "result"
+json_select "albumTotalCount"
+
+ifnot "0"
+
+	json_foreach "albums"
+    
+        # URL
+		json_select "albumId"
+		sayrest
+		say "/tracks.v1?start=1&display=1000"
+		say "|"
+
+		
+		# Preview
+		json_select "albumId"
+        say "https://music.line.me/webapp/album/"
+		sayrest
+		say "|"
+
+		# Album
+        json_select "albumTitle"
+		sayrest
+		say "|"
+
+		# Year
+		json_select "releaseDate"
+		sayregexp "^[0-9]{4}"
+		say "|"
+
+		# Tracks
+		json_select "trackTotalCount"
+		sayrest
+		say "|"
+
+        # Artist
+		json_select_array "artists" 1
+		json_select "artistName"
+        sayrest
+		
+		saynewline
+
+	json_foreach_end
+
+endif
+
+
+# ###################################################################
+# Album
+# ###################################################################
+
+
+[ParserScriptAlbum]=...
+
+json "on"
+json_select_object "response"
+json_select_object "result"
+
+
+json_select_array "tracks" 1
+
+# Album
+json_select_object "album"
+outputto "ALBUM"
+json_select "albumTitle"
+sayrest
+	
+# Year
+outputto "YEAR"
+json_select "releaseDate"
+sayregexp "^[0-9]{4}"
+
+
+# Cover
+outputto "COVERURL"
+json_select "imageUrl"
+sayrest
+
+# Album Artist
+json_select_array "artists" 1
+outputto "ALBUMARTIST"
+json_select "artistName"
+sayrest
+
+json "off"
+
+# Track Loop
+
+json "on"
+json_select_object "response"
+json_select_object "result"
+
+json_foreach "tracks"
+	# Track Number
+	outputto "TRACK"
+	json_select "trackNumber" 
+	sayrest
+	say "|"
+
+	# Disc Number
+	outputto "DISCNUMBER"
+	json_select "discNumber"
+	sayrest
+	say "|"
+
+	# Title
+	outputto "TRACKS"
+	json_select "trackTitle"
+	sayrest
+	say "|"
+
+	# Artist
+	json_select_array "artists" 1
+	outputto "ARTIST"
+	json_select "artistName"
+	sayrest
+	say "|"
+
+
+json_foreach_end
