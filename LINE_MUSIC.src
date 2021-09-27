@@ -18,6 +18,7 @@
 # Index
 # ###################################################################
 
+
 [ParserScriptIndex]=...
 
 json "on"
@@ -44,7 +45,7 @@ ifnot "0"
 
 		# Album
 		json_select "albumTitle"
-		sayrest
+		sayregexp "[^|]{1,}"
 		say "|"
 
 		# Year
@@ -60,7 +61,7 @@ ifnot "0"
 		# Artist
 		json_select_array "artists" 1
 		json_select "artistName"
-		sayrest
+		sayregexp "[^|]{1,}"
 		
 		saynewline
 
@@ -89,7 +90,7 @@ json_select_array "tracks" 1
 json_select_object "album"
 outputto "ALBUM"
 json_select "albumTitle"
-sayrest
+sayregexp "[^|]{1,}"
 	
 # Year
 outputto "YEAR"
@@ -106,7 +107,7 @@ sayrest
 json_select_array "artists" 1
 outputto "ALBUMARTIST"
 json_select "artistName"
-sayrest
+sayregexp "[^|]{1,}"
 
 json "off"
 
@@ -132,14 +133,14 @@ json_foreach "tracks"
 	# Title
 	outputto "TRACKS"
 	json_select "trackTitle"
-	sayrest
+	sayregexp "[^|]{1,}"
 	say "|"
 
 	# Artist
 	json_select_array "artists" 1
 	outputto "ARTIST"
 	json_select "artistName"
-	sayrest
+	sayregexp "[^|]{1,}"
 	say "|"
 
 json_foreach_end
