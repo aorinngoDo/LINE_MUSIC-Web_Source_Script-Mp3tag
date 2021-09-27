@@ -29,7 +29,7 @@ ifnot "0"
 
 	json_foreach "albums"
     
-        # URL
+		# URL
 		json_select "albumId"
 		sayrest
 		say "/tracks.v1?start=1&display=1000"
@@ -38,12 +38,12 @@ ifnot "0"
 		
 		# Preview
 		json_select "albumId"
-        say "https://music.line.me/webapp/album/"
+		say "https://music.line.me/webapp/album/"
 		sayrest
 		say "|"
 
 		# Album
-        json_select "albumTitle"
+		json_select "albumTitle"
 		sayrest
 		say "|"
 
@@ -57,10 +57,10 @@ ifnot "0"
 		sayrest
 		say "|"
 
-        # Artist
+		# Artist
 		json_select_array "artists" 1
 		json_select "artistName"
-        sayrest
+		sayrest
 		
 		saynewline
 
@@ -141,6 +141,5 @@ json_foreach "tracks"
 	json_select "artistName"
 	sayrest
 	say "|"
-
 
 json_foreach_end
